@@ -16,7 +16,7 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
     label: 'Python',
     monacoId: 'python',
     fileExt: 'py',
-    interactiveInput: true,
+    interactiveInput: false,
     defaultCode: `# Python — powered by Pyodide (WASM)
 name = input("What's your name? ")
 print(f"Hello, {name}!")

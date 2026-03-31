@@ -42,10 +42,7 @@
         </div>
 
         <Transition name="slide">
-          <StdinPanel
-            v-if="!LANGUAGES[language].interactiveInput"
-            v-model="stdin"
-          />
+          <StdinPanel v-model="stdin" />
         </Transition>
       </div>
 
@@ -64,21 +61,13 @@
       </div>
     </main>
 
-    <!-- Interactive input modal — Python only -->
-    <InputModal
-      :show="pyodide.awaitingInput.value"
-      :prompt="pyodide.inputPrompt.value"
-      @submit="pyodide.submitInput"
-      @cancel="pyodide.cancel"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import EditorPane from './components/EditorPane.vue'
 import OutputPane from './components/OutputPane.vue'
-import InputModal from './components/InputModal.vue'
 import RunButton from './components/RunButton.vue'
 import LanguageSelector from './components/LanguageSelector.vue'
 import StdinPanel from './components/StdinPanel.vue'
@@ -132,11 +121,10 @@ const activeExecTime = computed(() => activeRunner.value.executionTime.value)
 const activeStatus   = computed(() => activeRunner.value.status.value)
 const activeReady    = computed(() => {
   switch (language.value) {
-    case 'python': return pyodide.pyodideReady.value
-    case 'ruby':   return ruby.runtimeReady.value
+    case 'ruby': return ruby.runtimeReady.value
     case 'c':
-    case 'cpp':    return clang.runtimeReady.value
-    default: return false
+    case 'cpp':  return clang.runtimeReady.value
+    default:     return pyodide.pyodideReady.value
   }
 })
 
@@ -145,7 +133,7 @@ const activeReady    = computed(() => {
 function handleRun() {
   const lang = language.value
   if (lang === 'python') {
-    pyodide.run(code.value)
+    pyodide.run(code.value, stdin.value)
   } else if (lang === 'ruby') {
     ruby.run(code.value, stdin.value)
   } else {
@@ -156,10 +144,6 @@ function handleRun() {
 
 function handleCancel() { activeRunner.value.cancel() }
 function handleClear()  { activeRunner.value.clearOutput() }
-
-watch(language, (lang) => {
-  if (lang === 'python') stdin.value = ''
-})
 
 // ─── Status display ───────────────────────────────────────────────────────────
 

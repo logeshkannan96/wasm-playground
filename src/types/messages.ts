@@ -2,7 +2,6 @@
 
 export interface InitMessage {
   type: 'INIT'
-  inputSab: SharedArrayBuffer   // Int32[0]=semaphore, Uint8[4..]=UTF-8 string
   interruptSab: SharedArrayBuffer // Uint8[0]: 0=none, 2=KeyboardInterrupt
 }
 
