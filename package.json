@@ -1,0 +1,24 @@
+{
+  "name": "python-wasm-runner",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@monaco-editor/loader": "^1.7.0",
+    "@ruby/wasm-wasi": "^2.8.1-2.9.0",
+    "monaco-editor": "^0.52.2",
+    "vue": "^3.5.13",
+    "wasmoon": "^1.16.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.5",
+    "vue-tsc": "^2.2.0"
+  }
+}
