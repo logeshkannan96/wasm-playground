@@ -1,7 +1,7 @@
 <template>
   <div class="run-controls">
     <button
-      v-if="status !== 'running' && status !== 'awaiting-input'"
+      v-if="status !== 'running'"
       class="btn btn-run"
       :disabled="status === 'loading' || !pyodideReady"
       @click="emit('run')"
@@ -9,7 +9,7 @@
     >
       <span v-if="status === 'loading'" class="spinner" />
       <span v-else class="icon">▶</span>
-      <span>{{ status === 'loading' ? 'Loading Python...' : 'Run' }}</span>
+      <span>{{ status === 'loading' ? 'Loading...' : 'Run' }}</span>
     </button>
 
     <button
@@ -19,7 +19,7 @@
       title="Stop execution"
     >
       <span class="icon">■</span>
-      <span>{{ status === 'awaiting-input' ? 'Cancel' : 'Stop' }}</span>
+      <span>Stop</span>
     </button>
   </div>
 </template>

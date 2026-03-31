@@ -154,7 +154,6 @@ const statusLabel = computed(() => {
   if (s === 'running') return (language.value === 'c' || language.value === 'cpp')
     ? 'Compiling & running...'
     : 'Running...'
-  if (s === 'awaiting-input') return 'Waiting for input'
   if (s === 'error')   return 'Error'
   return ''
 })
@@ -163,7 +162,6 @@ const statusClass = computed(() => ({
   'dot-ready':   activeStatus.value === 'idle' && activeReady.value,
   'dot-loading': activeStatus.value === 'loading' || (activeStatus.value === 'idle' && !activeReady.value),
   'dot-running': activeStatus.value === 'running',
-  'dot-input':   activeStatus.value === 'awaiting-input',
   'dot-error':   activeStatus.value === 'error',
 }))
 </script>
@@ -269,7 +267,6 @@ body {
 .dot-ready   { background: #4caf82; }
 .dot-loading { background: #ffd93d; animation: pulse 1.2s ease-in-out infinite; }
 .dot-running { background: #4a90e2; animation: pulse 0.8s ease-in-out infinite; }
-.dot-input   { background: #a78bfa; animation: pulse 1s ease-in-out infinite; }
 .dot-error   { background: #e05c5c; }
 
 .status-label { color: #555; font-size: 11px; font-weight: 400; letter-spacing: 0; text-transform: none; }
