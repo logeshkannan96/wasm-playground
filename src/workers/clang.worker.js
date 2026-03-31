@@ -44,8 +44,15 @@ function hostWrite(text) {
 async function warmup() {
   post({ type: 'LOADING', text: 'Downloading C/C++ compiler (wasm-clang, ~60 MB first load)...' });
 
-  // Load shared.js from wasm-clang CDN — defines the `API` class as a global.
-  importScripts(CDN + 'shared.js');
+  // Load shared.js via fetch (avoids importScripts COEP cross-origin restriction),
+  // then importScripts a same-origin Blob URL so top-level declarations (including
+  // `class API`) land on the worker global scope.
+  const sharedResp = await fetch(CDN + 'shared.js');
+  const sharedCode = await sharedResp.text();
+  const blob = new Blob([sharedCode], { type: 'application/javascript' });
+  const blobUrl = URL.createObjectURL(blob);
+  importScripts(blobUrl);
+  URL.revokeObjectURL(blobUrl);
 
   api = new API({                                         // eslint-disable-line no-undef
     readBuffer: async (name) => {
@@ -53,7 +60,11 @@ async function warmup() {
       return r.arrayBuffer();
     },
     compileStreaming: async (name) => {
-      return WebAssembly.compileStreaming(fetch(CDN + name));
+      // compileStreaming requires Content-Type: application/wasm which GitHub Pages
+      // doesn't always serve — fall back to arrayBuffer + compile instead.
+      const r = await fetch(CDN + name);
+      const buf = await r.arrayBuffer();
+      return WebAssembly.compile(buf);
     },
     hostWrite,
   });

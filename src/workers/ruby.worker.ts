@@ -16,7 +16,7 @@ function post(msg: WorkerToMain) {
 async function init() {
   post({ type: 'LOADING', text: 'Loading Ruby runtime (ruby.wasm)...' })
   try {
-    const { DefaultRubyVM } = await import('@ruby/wasm-wasi')
+    const { DefaultRubyVM } = await import('@ruby/wasm-wasi/dist/browser')
     const response = await fetch(RUBY_WASM_URL)
     const buffer = await response.arrayBuffer()
     const mod = await WebAssembly.compile(buffer)

@@ -1,4 +1,4 @@
-export type Language = 'python' | 'ruby' | 'lua' | 'c' | 'cpp'
+export type Language = 'python' | 'ruby' | 'c' | 'cpp'
 
 export interface LanguageMeta {
   label: string
@@ -43,25 +43,6 @@ puts "Hello, #{name}!"
 end
 
 puts "\\nRuby #{RUBY_VERSION}"
-`,
-  },
-
-  lua: {
-    label: 'Lua',
-    monacoId: 'lua',
-    fileExt: 'lua',
-    interactiveInput: false,
-    defaultCode: `-- Lua 5.4 — powered by wasmoon (WASM)
-local name = io.read()
-print("Hello, " .. name .. "!")
-
-for i = 1, 5 do
-  io.write("  " .. i .. ". ")
-  for _ = 1, i do io.write("*") end
-  print()
-end
-
-print("\\n" .. _VERSION)
 `,
   },
 

@@ -96,7 +96,6 @@ const stdin = ref('')
 const codeBuffers = ref<Record<Language, string>>({
   python: LANGUAGES.python.defaultCode,
   ruby:   LANGUAGES.ruby.defaultCode,
-  lua:    LANGUAGES.lua.defaultCode,
   c:      LANGUAGES.c.defaultCode,
   cpp:    LANGUAGES.cpp.defaultCode,
 })
@@ -114,10 +113,6 @@ const ruby = useWasmRunner(
   () => new Worker(new URL('./workers/ruby.worker.ts', import.meta.url), { type: 'module' })
 )
 
-const lua = useWasmRunner(
-  () => new Worker(new URL('./workers/lua.worker.ts', import.meta.url), { type: 'module' })
-)
-
 // C and C++ share one wasm-clang worker instance (same compiler, different file extension)
 const clang = useClangRunner()
 
@@ -126,7 +121,6 @@ const clang = useClangRunner()
 const activeRunner = computed(() => {
   switch (language.value) {
     case 'ruby': return ruby
-    case 'lua':  return lua
     case 'c':
     case 'cpp':  return clang
     default:     return pyodide
@@ -140,7 +134,6 @@ const activeReady    = computed(() => {
   switch (language.value) {
     case 'python': return pyodide.pyodideReady.value
     case 'ruby':   return ruby.runtimeReady.value
-    case 'lua':    return lua.runtimeReady.value
     case 'c':
     case 'cpp':    return clang.runtimeReady.value
     default: return false
@@ -155,8 +148,6 @@ function handleRun() {
     pyodide.run(code.value)
   } else if (lang === 'ruby') {
     ruby.run(code.value, stdin.value)
-  } else if (lang === 'lua') {
-    lua.run(code.value, stdin.value)
   } else {
     // C or C++ — both use the same clang runner, language passed for file ext
     clang.run(code.value, lang, stdin.value)

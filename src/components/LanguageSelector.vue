@@ -23,7 +23,6 @@ const emit = defineEmits<{ 'update:modelValue': [lang: Language] }>()
 const ICONS: Record<Language, string> = {
   python: '🐍',
   ruby: '💎',
-  lua: '🌙',
   c: '⚙',
   cpp: '⚡',
 }
